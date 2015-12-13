@@ -1,0 +1,12 @@
+Dec 12 18:04:44 10.0.3.2 DHCP: Server receive REQUEST from 84:7a:88:34:7c:cf.
+Dec 12 18:04:44 10.0.3.2 DHCP: Server sending ACK to 192.168.56.4. (Lease time = 86400)
+Dec 12 18:06:05 10.0.3.2 DHCP: Server receive REQUEST from 84:7a:88:10:c6:44.
+Dec 12 18:06:05 10.0.3.2 DHCP: Server sending NAK to 84:7a:88:10:c6:44.
+Dec 12 18:06:05 10.0.3.2 DHCP: Server receive REQUEST from 84:7a:88:10:c6:44.
+Dec 12 18:06:05 10.0.3.2 DHCP: Server sending NAK to 84:7a:88:10:c6:44.
+Dec 12 18:06:07 10.0.3.2 DHCP: Server receive REQUEST from 84:7a:88:10:c6:44.
+Dec 12 18:06:07 10.0.3.2 DHCP: Server sending NAK to 84:7a:88:10:c6:44.
+Dec 12 18:06:09 10.0.3.2 DHCP: Server receive DISCOVER from 84:7a:88:10:c6:44.
+Dec 12 18:06:09 10.0.3.2 DHCP: Server sending OFFER of 192.168.56.5.
+Dec 12 18:06:09 10.0.3.2 DHCP: Server receive REQUEST from 84:7a:88:10:c6:44.
+Dec 12 18:06:09 10.0.3.2 DHCP: Server sending ACK to 192.168.56.5. (Lease time = 86400)
