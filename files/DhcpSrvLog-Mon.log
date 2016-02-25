@@ -1,0 +1,54 @@
+		Aktivitätsprotokoll des Microsoft DHCP-Diensts
+
+
+Ereignis-ID  Bedeutung
+00	Das Protokoll wurde gestartet.
+01	Das Protokoll wurde beendet.
+02	Das Protokoll wurde aufgrund von unzureichendem Speicherplatz temporär angehalten.
+10	Für einen Client wurde eine neue IP-Adresse geleast.
+11	Eine Lease wurde von einem Client erneuert.
+12	Eine Lease wurde von einem Client freigegeben.
+13	Es wurde ermittelt, dass eine IP-Adresse im Netzwerk verwendet wird.
+14	Eine Leaseanforderung konnte nicht erfüllt werden, da der Adresspool des Bereichs erschöpft war.
+15	Eine Lease wurde verweigert.
+16	Eine Lease wurde gelöscht.
+17	Eine Lease war abgelaufen, und die DNS-Einträge für eine abgelaufene Lease wurden nicht gelöscht.
+18	Eine Lease war abgelaufen, und die DNS-Einträge wurden gelöscht.
+20	Eine BOOTP-Adresse wurde einem Client geleast.
+21	Eine dynamische BOOTP-Adresse wurde einem Client geleast.
+22	Eine BOOTP-Anforderung konnte nicht erfüllt werden, da der Adresspool für BOOTP des Bereichs erschöpft war.
+23	Eine BOOTP-IP-Adresse wurde gelöscht, nachdem sichergestellt wurde, dass sie nicht verwendet wird.
+24	Der Bereinigungsvorgang für die IP-Adresse wurde gestartet.
+25	Statistik der IP-Adressenbereinigung.
+30	DNS-Updateanforderung an den benannten DNS-Server.
+31	Fehler beim DNS-Update.
+32	Das DNS-Update war erfolgreich.
+33	Das Paket wurde aufgrund der NAP-Richtlinie verworfen.
+34	Fehler bei der DNS-Updateanforderung: Die maximale Anzahl von DNS-Updateanforderungen in der Warteschlange wurde überschritten.
+35	 Fehler bei der DNS-Updateanforderung.
+36	Das Paket wurde verworfen, da sich der Server in der Failoverstandbyrolle befindet oder der Hash der Client-ID abweicht.
+50+	Codes über 50 werden für Informationen über die Erkennung nicht autorisierter Server verwendet.
+
+QErgebnis: 0: Keine Quarantäne, 1: Quarantäne, 2: Paket verwerfen, 3: Probe, 6: Keine Quarantäneinformationen Probezeit: Jahr-Monat-Tag Stunde:Minute:Sekunde:Millisekunde.
+
+ID,Datum,Zeit,Beschreibung,IP-Adresse,Hostname,MAC-Adresse,Benutzername,Transaktions-ID, QErgebnis,Probezeit,Korrelations-ID,DHCID,Herausgeberklasse(Hex),Herausgeberklasse(ASCII),Benutzerklasse(Hex),Benutzerklasse(ASCII),Relay-Agent-Informationen,DNS-Registrierungsfehler.
+00,02/22/16,18:16:57,Gestartet,,,,,0,6,,,,,,,,,0
+55,02/22/16,18:16:59,Autorisiert (Dienst gestartet),,othr.de,,,0,6,,,,,,,,,0
+11,02/22/16,18:17:11,Erneuern,10.1.10.100,DESKTOP-1JQAOI4.othr.de,F04DA2653E78,,936614886,0,,,,0x4D53465420352E30,MSFT 5.0,,,,0
+10,02/22/16,18:20:45,Zuweisen,10.1.10.105,DIR-300.othr.de,FC75164AA673,,1619560118,0,,,,,,,,,0
+11,02/22/16,18:33:21,Erneuern,10.1.10.100,DESKTOP-1JQAOI4.othr.de,F04DA2653E78,,218336395,0,,,,0x4D53465420352E30,MSFT 5.0,,,,0
+11,02/22/16,18:33:22,Erneuern,10.1.10.105,DIR-300.othr.de,FC75164AA673,,1241287734,0,,,,,,,,,0
+11,02/22/16,18:33:24,Erneuern,10.1.10.100,DESKTOP-1JQAOI4.othr.de,F04DA2653E78,,2681610640,0,,,,0x4D53465420352E30,MSFT 5.0,,,,0
+12,02/22/16,18:33:25,Freigeben,10.1.10.105,DIR-300.othr.de,FC75164AA673,,1738196559,0,,,,,,,,,0
+15,02/22/16,18:33:44,NACK,192.168.178.36,,04021F41CB86,,0,6,,,,,,,,,0
+11,02/22/16,18:33:44,Erneuern,10.1.10.103,android-d20b5552efcede88.othr.de,04021F41CB86,,938143039,0,,,,0x6468637063642D352E352E36,dhcpcd-5.5.6,,,,0
+10,02/22/16,18:34:06,Zuweisen,10.1.10.105,iPhone.othr.de,DC2B2A578F67,,4292177801,0,,,,,,,,,0
+11,02/22/16,18:34:07,Erneuern,10.1.10.105,iPhone.othr.de,DC2B2A578F67,,4292177801,0,,,,,,,,,0
+10,02/22/16,18:34:17,Zuweisen,10.1.10.106,Philipps-iPhone.othr.de,6C72E7116228,,1701199621,0,,,,,,,,,0
+11,02/22/16,18:34:18,Erneuern,10.1.10.106,Philipps-iPhone.othr.de,6C72E7116228,,1701199621,0,,,,,,,,,0
+10,02/22/16,18:35:37,Zuweisen,10.1.10.107,phoebus.othr.de,60F81DB038B2,,1425479998,0,,,,,,,,,0
+11,02/22/16,18:35:38,Erneuern,10.1.10.107,phoebus.othr.de,60F81DB038B2,,1425479998,0,,,,,,,,,0
+11,02/22/16,18:35:40,Erneuern,10.1.10.107,phoebus.othr.de,60F81DB038B2,,1425479998,0,,,,,,,,,0
+11,02/22/16,18:35:44,Erneuern,10.1.10.107,phoebus.othr.de,60F81DB038B2,,1425479998,0,,,,,,,,,0
+11,02/22/16,18:35:57,Erneuern,10.1.10.107,phoebus.othr.de,60F81DB038B2,,1442257214,0,,,,,,,,,0
+11,02/22/16,18:46:59,Erneuern,10.1.10.105,iPhone.othr.de,DC2B2A578F67,,30830473,0,,,,,,,,,0

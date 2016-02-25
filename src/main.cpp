@@ -5,7 +5,7 @@
 #include "database_connection.cpp"
 #include "file_reader.cpp"
 
-const std::string file_name = "../files/testfile.txt";
+const std::string file_name = "files/access.log";
 
 int main(int argc, char **argv) 
 {
@@ -19,8 +19,8 @@ int main(int argc, char **argv)
    // analysis start, provide logs either by
    // database or by file reader
    std::cout << std::endl;
-   std::string logs = f_reader.Read_File(::file_name);
-   analyzer.Start_Analysis(logs);
+   std::vector<std::string> lines = f_reader.Read_File(::file_name);
+   analyzer.Start_Analysis(lines);
    std::cout << std::endl << std::endl;
 
    analyzer.Shutdown();
