@@ -17,14 +17,19 @@ void Analyzer::Start_Analysis(const std::vector<std::string> &logs)
    std::cout << "Starting Analysis..." << std::endl;
 
    std::vector<Login> login_records = regex_match(logs);
-   std::vector<Device> devices = filter_devices(login_records);
+   //std::vector<Device> devices = filter_devices(login_records);
    std::vector<User> users = filter_users(login_records);
 
    for(auto login : login_records)
-         login.Print();
+      login.Print();
+   std::cout << std::endl;
+   std::cout << std::endl;
 
-   for(auto device : devices)
-         device.Print();
+   for(auto user : users)
+   {
+      user.Print();
+      std::cout << std::endl;
+   }
 }
 
 void Analyzer::Shutdown()
@@ -101,6 +106,7 @@ std::string cut_prefix(const std::string& argument, const std::string& prefix)
       return argument;
 }
 
+/*
 std::vector<Device> filter_devices(std::vector<Login>& login_records)
 {
    std::vector<Device> devices;
@@ -135,6 +141,7 @@ std::vector<Device> filter_devices(std::vector<Login>& login_records)
 
    return devices;
 }
+*/
 
 std::vector<User> filter_users(std::vector<Login>& login_records)
 {
@@ -142,20 +149,50 @@ std::vector<User> filter_users(std::vector<Login>& login_records)
    std::vector<Device> devices;
    std::vector<std::string> user_names;
 
-   for(auto login : login_records)
+   for(auto& login : login_records)
    {
       std::string login_name = login.getLoginName();
+      DeviceLogin currentDeviceLogin(login.getMac(), login.getLoginDate() + " - " + login.getLoginTime());
+
       // check if user name already exists
       if(!(std::find(user_names.begin(), user_names.end(), login_name) != user_names.end()))
       {
-         // it does not exist yet
+         // it does not exist yet, so put in list and create new user
          user_names.push_back(login_name);
+         std::vector<DeviceLogin> logins;
+         logins.push_back(currentDeviceLogin);
+         User newUser(login_name, logins);
+         users.push_back(newUser);
 
-         // TODO:
-         //User new_user();
-         //users.push_back(new_user);
+      }
+      else
+      {
+         // user already exists, so insert
+         for(auto& user : users)
+         {
+            if(user.getLoginName() == login_name)
+            {
+               // check whether first if a login with same mac and login already exists
+               bool isLoginContained(false);
+               for(auto& device_login : user.getLogins())
+               {
+                  if(device_login.getMac() == login.getMac() && device_login.getLoginTime() == (login.getLoginDate() + " - " + login.getLoginTime()))
+                  {
+                     isLoginContained = true;
+                  }
+               }
+
+               if(!isLoginContained)
+               {
+                  user.Add_Device_Login(currentDeviceLogin);
+               }
+               break;
+            }
+         }
+
       }
    }
 
    return users;
 }
+

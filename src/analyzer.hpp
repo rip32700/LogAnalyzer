@@ -9,7 +9,7 @@
 #include <algorithm>
 
 #include "login.hpp"
-#include "device.hpp"
+#include "device_login.hpp"
 #include "user.hpp"
 
 class Analyzer
