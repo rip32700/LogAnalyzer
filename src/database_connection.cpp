@@ -49,6 +49,7 @@ int run(DBClientBase* conn) {
     return EXIT_SUCCESS;
 }
 
+/*
 int main(int argc, char* argv[]) {
     if (argc > 2) {
         std::cout << "usage: " << argv[0] << " [MONGODB_URI]" << std::endl;
@@ -86,6 +87,7 @@ int main(int argc, char* argv[]) {
     }
     return ret;
 }
+*/
 
 
 void Database_Connection::Connect()

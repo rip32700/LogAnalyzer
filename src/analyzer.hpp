@@ -2,9 +2,15 @@
 #define H_ANALYZER
 
 #include <iostream>
+#include <vector>
+#include <string>
 #include <fstream>
 #include <regex>
-#include <string>
+#include <algorithm>
+
+#include "login.hpp"
+#include "device.hpp"
+#include "user.hpp"
 
 class Analyzer
 {
@@ -12,7 +18,7 @@ public:
    Analyzer() {};
    ~Analyzer() {};
    void Initialize();
-   void Start_Analysis(const std::vector<std::string> &lines);
+   void Start_Analysis(const std::vector<std::string> &logs);
    void Shutdown();
 };
 
