@@ -5,6 +5,7 @@
 #include "device.hpp"
 #include "user.hpp"
 
+#include "mongo/client/dbclient.h"
 #include "analyzer.cpp"
 #include "database_connection.cpp"
 #include "file_reader.cpp"
@@ -29,7 +30,6 @@ int main(int argc, char **argv)
 
    // SHUTDOWN
    analyzer.Shutdown();
-   con.Disconnect();
 
    return EXIT_SUCCESS;
 }
