@@ -8,42 +8,53 @@
 #ifndef DEVICELOGIN_HPP_
 #define DEVICELOGIN_HPP_
 
+#include <ctime>
+#include <string>
+#include <iostream>
 
 class DeviceLogin
 {
-private:
-	std::string mac;
-	std::string login_time;
-
 public:
-	DeviceLogin(const std::string& mac, const std::string& login_time)
-	{
-		this->mac = mac;
-		this->login_time = login_time;
+	DeviceLogin(const std::string& mac, const time_t& timeStamp) {
+		this->mMac = mac;
+		this->mTimeStamp = timeStamp;
 	}
+
 	~DeviceLogin() {}
 
-	void Print()
-	{
-		//std::cout << "Device Login Details: " << std::endl;
-		std::cout << "---> MAC: " << mac << std::endl;
-		std::cout << "---> Login at : " << login_time << std::endl;
+	inline friend std::ostream& operator<<(std::ostream& out, const DeviceLogin& deviceLogin) /* output */	{
+		out << "---> MAC: " << deviceLogin.mMac << std::endl;
+		out << "---> Login at: " << formatDate(deviceLogin.mTimeStamp) << std::endl;
+
+		return out;
 	}
 
 	const std::string& getMac() const {
-		return mac;
+		return mMac;
 	}
 
 	void setMac(const std::string& mac) {
-		this->mac = mac;
+		this->mMac = mac;
 	}
 
-	const std::string& getLoginTime() const {
-		return login_time;
+	time_t getTimeStamp() const {
+		return mTimeStamp;
 	}
 
-	void setLoginTime(const std::string& loginTime) {
-		login_time = loginTime;
+	void setTimeStamp(time_t timeStamp) {
+		mTimeStamp = timeStamp;
+	}
+
+private:
+	std::string mMac;
+	time_t mTimeStamp;
+
+	static std::string formatDate(const std::time_t time) {
+		char buffer[80];
+		tm* ltm = localtime(&time);
+		strftime(buffer,80,"%d-%m-%Y %I:%M:%S",ltm);
+		std::string formatedDate(buffer);
+		return formatedDate;
 	}
 };
 

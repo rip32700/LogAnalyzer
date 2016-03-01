@@ -11,65 +11,67 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <ctime>
 
 class Login
 {
-private:
-	std::string login_name;
-	std::string mac;
-	std::string login_date;
-	std::string login_time;
-
 public:
-	Login(const std::string& login_name, const std::string& mac, const std::string& login_date, const std::string& login_time)
-	{
-		this->login_name = login_name;
-		this->mac = mac;
-		this->login_date = login_date;
-		this->login_time = login_time;
+
+	Login(const std::string& loginName, const std::string& mac, const time_t& timeStamp) {
+		this->mLoginName = loginName;
+		this->mMac = mac;
+		this->mTimeStamp = timeStamp;
 	}
+
 	~Login() { }
 
-	void Print()
-	{
-		std::cout << "Login Record Details: " << std::endl;
-		std::cout << "---> Login Name: " << login_name << std::endl;
-		std::cout << "---> MAC: " << mac << std::endl;
-		std::cout << "---> Login Date: " << login_date << std::endl;
-		std::cout << "---> Login Time: " << login_time << std::endl;
-	}
+	inline friend std::ostream& operator<<(std::ostream& out, const Login& login) /* output */ {
+		out << "Login Record Details: " << std::endl;
+		out << "-> Login Name: " << login.mLoginName << std::endl;
+		out << "-> MAC: " << login.mMac << std::endl;
+		out << "-> Login Date: " << formatDate(login.mTimeStamp) << std::endl;
 
-	const std::string& getLoginDate() const {
-		return login_date;
-	}
-
-	void setLoginDate(const std::string& loginDate) {
-		login_date = loginDate;
+		return out;
 	}
 
 	const std::string& getLoginName() const {
-		return login_name;
+		return mLoginName;
 	}
 
 	void setLoginName(const std::string& loginName) {
-		login_name = loginName;
-	}
-
-	const std::string& getLoginTime() const {
-		return login_time;
-	}
-
-	void setLoginTime(const std::string& loginTime) {
-		login_time = loginTime;
+		mLoginName = loginName;
 	}
 
 	const std::string& getMac() const {
-		return mac;
+		return mMac;
 	}
 
 	void setMac(const std::string& mac) {
-		this->mac = mac;
+		mMac = mac;
+	}
+
+	time_t getTimeStamp() const {
+		return mTimeStamp;
+	}
+
+	void setTimeStamp(time_t timeStamp) {
+		mTimeStamp = timeStamp;
+	}
+
+private:
+	std::string mLoginName;
+	std::string mMac;
+	time_t mTimeStamp;
+
+	static std::string formatDate(const std::time_t time) {
+		char buffer[80];
+		tm* ltm = localtime(&time);
+		strftime(buffer,80,"%d-%m-%Y %I:%M:%S",ltm);
+		std::string formatedDate(buffer);
+		return formatedDate;
 	}
 };
+
+
 
 #endif /* USER_HPP_ */

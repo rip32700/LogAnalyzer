@@ -3,10 +3,13 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 #include <string>
 #include <fstream>
 #include <regex>
 #include <algorithm>
+#include <ctime>
+#include <cmath>
 
 #include "login.hpp"
 #include "device_login.hpp"
