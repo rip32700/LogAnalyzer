@@ -4,46 +4,73 @@
 #include <windows.h>
 #endif
 
-#include "mongo/client/dbclient.h"
-#include <iostream>
-
 using namespace std;
 using namespace mongo;
 
-
-mongo::DBClientBase* Database_Connection::Connect(std::string& uri)
+mongo::DBClientBase* Database_Connection::Connect(std::string uri)
 {
 	mongo::client::GlobalInstance instance;
 	std::string errmsg;
 
 	ConnectionString cs = ConnectionString::parse(uri, errmsg);
-	boost::scoped_ptr<DBClientBase> conn(cs.connect(errmsg));
-	
-	return conn.get();
+	return cs.connect(errmsg);
 }
 
-mongo::DBClientCursor* Database_Connection::GetAll(mongo::DBClientBase* conn, std::string tableName)
+std::vector<std::string> Database_Connection::GetAll(mongo::DBClientBase* conn, std::string collectionName)
 {
-	auto cursor = conn->query(tableName, BSONObj());
+	auto cursor = conn->query(collectionName, BSONObj());
 	if (!cursor.get()) {
 	    cout << "query failure" << endl;
 	}
 
-	return cursor.get();
+	std::vector<std::string> retVector;
 
-	/*
 	while (cursor->more()) {
-	    cout << cursor->next().toString() << endl;
+	    retVector.push_back(cursor->next().getStringField("log"));
 	}
-	*/
+
+	return retVector;
 }
 
-void Database_Connection::InsertBSONObj(mongo::DBClientBase* conn, std::string tableName, mongo::BSONObj obj)
+void Database_Connection::ReadFromFile(mongo::DBClientBase* conn, std::string fileName)
 {
-	conn->insert(tableName, obj);
+	std::ifstream infile(fileName);
+	std::string line;
+
+	while (std::getline(infile, line))
+	{
+	    BSONObj p = BSON("log" << line);
+	    conn->insert("hsp.logs", p);
+	}
 }
 
-void Database_Connection::InsertBSONObj(mongo::DBClientBase* conn, std::string tableName, std::vector<mongo::BSONObj>& obj)
+void Database_Connection::DropCollection(mongo::DBClientBase* conn, std::string collectionName)
 {
-	conn->insert(tableName, obj);
+	cout << "Dropping old Collection" << endl;
+	conn->dropCollection(collectionName);
+}
+
+void Database_Connection::InsertBSONObj(mongo::DBClientBase* conn, std::string collectionName, mongo::BSONObj obj)
+{
+	conn->insert(collectionName, obj);
+}
+
+void Database_Connection::InsertBSONObj(mongo::DBClientBase* conn, std::string collectionName, std::vector<mongo::BSONObj>& obj)
+{
+	conn->insert(collectionName, obj);
+}
+
+BSONObj Database_Connection::CreateBSON(Login data)
+{
+	return BSON("loginname" << data.getLoginName() << "mac" << data.getMac() << "logindate" << boost::lexical_cast<std::string>(data.getTimeStamp()));
+}
+
+BSONObj Database_Connection::CreateBSON(User data)
+{
+
+}
+
+BSONObj Database_Connection::CreateBSON(Device data)
+{
+
 }

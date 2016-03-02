@@ -22,10 +22,13 @@ int main(int argc, char **argv)
    File_Reader f_reader;
 
    // INIT
-   //con.Connect();
+
+   mongo::DBClientBase* dbClient = con.Connect("mongodb://localhost:27017");
+   con.DropCollection(dbClient, "hsp.logs");
+   con.ReadFromFile(dbClient, ::test_file);
+   std::vector<std::string> logs = con.GetAll(dbClient, "hsp.logs");
+
    analyzer.Initialize();
-   
-   std::vector<std::string> logs = f_reader.Read_File(::test_file);
    analyzer.Start_Analysis(logs);
 
    // SHUTDOWN
