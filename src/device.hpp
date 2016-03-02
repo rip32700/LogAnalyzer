@@ -12,6 +12,15 @@
 #include <vector>
 #include <iostream>
 
+/**
+  * @author: prieger
+  * Device object
+  * - represents a device 
+  * - contains the device's mac address and the login timestamps
+  *
+  * OUTDATED CLASS - remains in project due to database setup
+  */
+
 class Device
 {
 private:
@@ -28,7 +37,13 @@ public:
 
 	void Add_Login_Date(const std::string& login_date)
 	{
+		std::cout << "Adding date (" << login_date << ") to mac " << mac << std::endl;
 		login_dates.push_back(login_date);
+		std::cout << "All current dates for mac " << mac << std::endl;
+		for(auto login_date : login_dates)
+		{
+			std::cout << "**** " << login_date << std::endl;
+		}
 	}
 
 	void Print()

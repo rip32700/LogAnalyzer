@@ -2,12 +2,18 @@
 #include <stdlib.h>
 
 #include "login.hpp"
-#include "device.hpp"
 #include "user.hpp"
+#include "file_reader.hpp"
 
 #include "mongo/client/dbclient.h"
 #include "analyzer.cpp"
-#include "file_reader.cpp"
+
+/**
+  * @author: prieger
+  * main function of the program
+  * - connects to mongo db
+  * - starts the analyzer functionality
+ */
 
 int main(int argc, char **argv) 
 {

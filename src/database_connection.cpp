@@ -1,10 +1,13 @@
 #include "database_connection.hpp"
 
+/* PROTOTYPES */
 std::string dateToString(const std::time_t time);
 std::time_t stringToDate(const std::string timeStampString);
 mongo::BSONObj createBSON(Device data);
 mongo::BSONObj createBSON(Login data);
 mongo::BSONObj createBSON(User data);
+
+/* IMPLEMENTATIONS */
 
 std::vector<std::string> Database_Connection::GetLogContent()
 {

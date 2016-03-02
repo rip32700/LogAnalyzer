@@ -13,9 +13,20 @@
 #include <iostream>
 #include "device_login.hpp"
 
+/**
+ * @author: prieger
+ * User Object
+ * - represents a user that logged in 
+ * - contains his login-name as well as the device-logins 
+ *   with which he accessed the system 
+ */
+
 class User
 {
 public:
+
+	/* CONSTRUCTOR and DESTRUCTOR */
+
 	User(const std::string& loginName, const std::vector<DeviceLogin>& logins) {
 		this->mLoginName = loginName;
 		this->mLogins = logins;
@@ -23,9 +34,7 @@ public:
 
 	~User() { }
 
-	void Add_Device_Login(const DeviceLogin& deviceLogin) {
-		this->mLogins.push_back(deviceLogin);
-	}
+    /* OPERATORS */
 
 	inline friend std::ostream& operator<<(std::ostream& out, const User& user) /* output */ {
 		out << "User Details: " << std::endl;
@@ -38,6 +47,14 @@ public:
 
 		return out;
 	}
+
+	/* FUNCTIONS */
+
+	void Add_Device_Login(const DeviceLogin& deviceLogin) {
+		this->mLogins.push_back(deviceLogin);
+	}
+
+    /* GETTERS AND SETTERS */
 
 	const std::string& getLoginName() const {
 		return mLoginName;
@@ -64,6 +81,9 @@ public:
 	}
 
 private:
+
+	/* MEMBER ATTRIBUTES */
+
 	std::string mLoginName;
 	std::string mHandyMac;
 	std::vector<DeviceLogin> mLogins;
