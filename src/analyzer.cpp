@@ -1,11 +1,17 @@
 #include "analyzer.hpp"
 
 // helper methods
-std::vector<Login> regex_match(const std::vector<std::string> log_lines);
+void regex_match(const std::vector<std::string> log_lines, Database_Connection dbConn);
 std::string cut_prefix(const std::string& argument, const std::string& prefix);
-std::vector<User> filter_users(std::vector<Login>& login_records);
-void determineHandyMac(User& user);
+void filter_users(std::vector<Login>& login_records, Database_Connection dbConn);
+void determineHandyMac(User& user, Database_Connection dbConn);
 void check_anomaly(const User& user, const long tolerance);
+
+// test files
+const std::string dhcp_log_file   = "files/DhcpSrvLog-Mon.log";
+const std::string radius_log_file = "files/IN1602.log";
+const std::string test_file       = "files/testfile.txt";
+const std::string old_log_file    = "files/access.log";
 
 const long standard_deviation = 5; // in minutes
 
@@ -14,19 +20,31 @@ void Analyzer::Initialize()
    std::cout << "Initializing Analyzer..." << std::endl;
 }
 
-void Analyzer::Start_Analysis(const std::vector<std::string> &logs)
+void Analyzer::Start_Analysis()
 {
    std::cout << "Starting Analysis..." << std::endl;
+   Database_Connection con("mongodb://localhost:27017");
+/*
+   std::vector<std::string> collections;
+   collections.push_back("hsp.logins");
+   collections.push_back("hsp.users");
+   con.DropCollections(collections);
+*/
+   // Init test data
+   con.ReadFromFile(::test_file);
+   std::vector<std::string> logs = con.GetLogContent();
+   regex_match(logs, con);
 
-   std::vector<Login> login_records(regex_match(logs));
-   std::vector<User> users(filter_users(login_records));
+   std::vector<Login> login_records = con.GetLogins();
+   filter_users(login_records, con);
 
+   std::vector<User> users = con.GetUsers();
 
    for(auto login : login_records)
       std::cout << login << std::endl << std::endl;
 
    for(auto& user : users) {
-      determineHandyMac(user);
+      determineHandyMac(user, con);
       std::cout << user << std::endl;
    }
 
@@ -43,7 +61,7 @@ void Analyzer::Shutdown()
 
 
 // helper methods
-std::vector<Login> regex_match(const std::vector<std::string> logLines) {
+void regex_match(const std::vector<std::string> logLines, Database_Connection dbConn) {
 
    std::vector<Login> loginRecords;
 
@@ -95,7 +113,11 @@ std::vector<Login> regex_match(const std::vector<std::string> logLines) {
       loginRecords.push_back(currentLogin);
     }
 
-    return loginRecords;
+    // Write login data to collection and drop logLines
+    dbConn.Upsert(loginRecords);
+    std::vector<std::string> collections;
+    collections.push_back("hsp.logs");
+    dbConn.DropCollections(collections);
 }
 
 std::string cut_prefix(const std::string& argument, const std::string& prefix) {
@@ -106,48 +128,36 @@ std::string cut_prefix(const std::string& argument, const std::string& prefix) {
       return argument;
 }
 
-std::vector<User> filter_users(std::vector<Login>& login_records) {
-
-   std::vector<User> users;
-   std::vector<Device> devices;
-   std::vector<std::string> user_names;
+void filter_users(std::vector<Login>& login_records, Database_Connection dbConn) {
+   // Check every login for new User information.
+   // New data will be added to the respective collections in MongoDB.
 
    for(auto& login : login_records) {
       std::string login_name(login.getLoginName());
       DeviceLogin currentDeviceLogin(login.getMac(), login.getTimeStamp());
 
-      // check if user name already exists
-      if(!(std::find(user_names.begin(), user_names.end(), login_name) != user_names.end())) {
-         // it does not exist yet, so put in list and create new user
-         user_names.push_back(login_name);
-         std::vector<DeviceLogin> logins;
-         logins.push_back(currentDeviceLogin);
-         User newUser(login_name, logins);
-         users.push_back(newUser);
+      User user = dbConn.GetUserIfExistsOrInsert(login_name, currentDeviceLogin);
+ 
+      // check if a login with same mac and timestamp already exists
+      bool isLoginContained(false);
+      for(auto& device_login : user.getLogins()) {
+    	 if(device_login.getMac() == login.getMac() && device_login.getTimeStamp() == login.getTimeStamp()) {
+            isLoginContained = true;
+	    break;
+	 }
+      }
 
-      } else {
-         // user already exists, so insert
-         for(auto& user : users) {
-            if(user.getLoginName() == login_name) {
-               // check whether first if a login with same mac and login already exists
-               bool isLoginContained(false);
-               for(auto& device_login : user.getLogins()) {
-                  if(device_login.getMac() == login.getMac() && device_login.getTimeStamp() == login.getTimeStamp())
-                     isLoginContained = true;
-               }
-               if(!isLoginContained)
-                  user.Add_Device_Login(currentDeviceLogin);
-               break;
-            }
-         }
-
+      if(!isLoginContained) {
+	std::vector<DeviceLogin> logins = user.getLogins();
+	logins.push_back(currentDeviceLogin);
+	user.setLogins(logins);
+	
+	dbConn.Upsert(user);
       }
    }
-
-   return users;
 }
 
-void determineHandyMac(User& user) {
+void determineHandyMac(User& user, Database_Connection dbConn) {
    //std::cout << "MAC Frequencies for User " << user.getLoginName() << std::endl;
 
    std::vector<DeviceLogin> logins(user.getLogins());
@@ -171,6 +181,7 @@ void determineHandyMac(User& user) {
    //std::cout << "Handy-Mac: " << handy_mac << std::endl;
 
    user.setHandyMac(handyMac);
+   dbConn.Upsert(user);
 
    /* TODO: resolve mac address to vendor */
 }

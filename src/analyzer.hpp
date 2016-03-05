@@ -14,6 +14,7 @@
 #include "login.hpp"
 #include "device_login.hpp"
 #include "user.hpp"
+#include "database_connection.cpp"
 
 class Analyzer
 {
@@ -21,7 +22,7 @@ public:
    Analyzer() {};
    ~Analyzer() {};
    void Initialize();
-   void Start_Analysis(const std::vector<std::string> &logs);
+   void Start_Analysis();
    void Shutdown();
 };
 
