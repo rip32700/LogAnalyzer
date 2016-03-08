@@ -11,7 +11,7 @@
 
 int main(int argc, char **argv) 
 {
-   Analyzer analyzer;
+   Analyzer analyzer("mongodb://localhost:27017");
    File_Reader f_reader;
 
    // INIT
